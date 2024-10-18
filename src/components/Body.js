@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import RestaurantCard from "./RestaurantCard";
 import { Link } from "react-router-dom";
 import { RESCARD_API } from "../utils/constants";
+import useOnlineStatus from "../utils/useOnlineStatus";
 
 const Body = () => {
   const [listOfRestaurant, setListOfRestaurant] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState([]);
-
+  const onlineStatus = useOnlineStatus();
   useEffect(() => {
     fetchData();
   }, []);
@@ -42,7 +43,10 @@ const Body = () => {
     const topRes = listOfRestaurant.filter((res) => res.info.avgRating > 4);
     setFilter(topRes);
   };
-
+  if (onlineStatus === false)
+    return (
+      <h1>Oops? looks like you are offline, please check your connections.</h1>
+    );
   return (
     <div className="body">
       <div className="filter">
